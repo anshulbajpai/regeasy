@@ -29,16 +29,63 @@
       return regeasy;
     };
 
+    var _RegeasyX = function _RegeasyX(regeasy){
+      internal(this).regeasy = regeasy;
+    };
+
+    _RegeasyX.prototype.anyTimes = function anyTimes() {
+      return internal(this).regeasy.anyTimes("");
+    };
+
+    _RegeasyX.prototype.atleastOnce = function atleastOnce() {
+      return internal(this).regeasy.atleastOnce("");
+    };
+
+    _RegeasyX.prototype.atmostOnce = function atmostOnce() {
+      return internal(this).regeasy.atmostOnce("");
+    };
+
+    _RegeasyX.prototype.exactly = function exactly(times) {
+      var regeasy = internal(this).regeasy;
+      internal(regeasy).regex += "{" + times + "}";
+      return regeasy;
+    };
+
+    _RegeasyX.prototype.times = function times(lower, upper) {
+      var regeasy = internal(this).regeasy;
+      internal(regeasy).regex += "{" + lower + "," + upper + "}";
+      return regeasy;
+    };
+
+    _RegeasyX.prototype.atleast = function atleast(lower) {
+      var regeasy = internal(this).regeasy;
+      internal(regeasy).regex += "{" + lower + "," + "}";
+      return regeasy;
+    };
+
+    _RegeasyX.prototype.test = function test(testString) {
+      return internal(this).regeasy.test(testString);
+    };
+
+    _RegeasyX.prototype.match = function match(input) {
+      return internal(this).regeasy.match(input);
+    };
+
+    _RegeasyX.prototype.toString = function toString() {
+      var regeasy = internal(this).regeasy;
+      return internal(regeasy).regex;
+    };
+
     var _Regeasy = function _Regeasy(){
       internal(this).regex = "";
     };
 
-    _Regeasy.prototype.matchAnything = function matchAnything() {
+    _Regeasy.prototype.anything = function anything() {
       internal(this).regex += ".";
-      return this;
+      return new _RegeasyX(this);
     };
 
-    _Regeasy.prototype.mayBe = function mayBe(input) {
+    _Regeasy.prototype.anyTimes = function anyTimes(input) {
       internal(this).regex += input + "*";
       return this;
     };
@@ -53,24 +100,9 @@
       return this;
     };
 
-    _Regeasy.prototype.exactly = function exactly(times) {
-      internal(this).regex += "{" + times + "}";
-      return this;
-    };
-
-    _Regeasy.prototype.times = function exactly(lower, upper) {
-      internal(this).regex += "{" + lower + "," + upper + "}";
-      return this;
-    };
-
-    _Regeasy.prototype.atleast = function atleast(lower) {
-      internal(this).regex += "{" + lower + "," + "}";
-      return this;
-    };
-
     _Regeasy.prototype.match = function match(input) {
       internal(this).regex += input;
-      return this;
+      return new _RegeasyX(this);
     };
 
     _Regeasy.prototype.either = function either(input) {

@@ -9,8 +9,8 @@ chai.should();
 describe('regeasy test', function() {
 
   it('should match anything', function() {
-    Regeasy().matchAnything().test('a').should.be.true;
-    Regeasy().matchAnything().test('ab123').should.be.true;
+    Regeasy().anything().test('a').should.be.true;
+    Regeasy().anything().test('ab123').should.be.true;
   });
 
   it('should match characters', function() {
@@ -34,19 +34,22 @@ describe('regeasy test', function() {
   });
 
   it('should match a character one or more times', function(){
-    Regeasy().mayBe('z').test('z').should.be.true;
-    Regeasy().mayBe('z').test('zzz').should.be.true;
-    Regeasy().mayBe('z').test('a').should.be.true;
+    Regeasy().anyTimes('z').test('z').should.be.true;
+    Regeasy().anyTimes('z').test('zzz').should.be.true;
+    Regeasy().anyTimes('z').test('a').should.be.true;
 
-    Regeasy().mayBe(Regeasy().match('z')).test('z').should.be.true;
-    Regeasy().mayBe(Regeasy().match('z')).test('zzz').should.be.true;
-    Regeasy().mayBe(Regeasy().match('z')).test('a').should.be.true;
+    Regeasy().anyTimes(Regeasy().match('z')).test('z').should.be.true;
+    Regeasy().anyTimes(Regeasy().match('z')).test('zzz').should.be.true;
+    Regeasy().anyTimes(Regeasy().match('z')).test('a').should.be.true;
+
+    Regeasy().anything().anyTimes().match('foo').test('afoo').should.be.true;
+    Regeasy().anything().anyTimes().match('foo').test('a').should.be.false;
   });
 
   it('should match a regex zero or more times', function(){
-    Regeasy().mayBe(Regeasy().match('z')).test('z').should.be.true;
-    Regeasy().mayBe(Regeasy().match('z')).match('a').test('zzz').should.be.false;
-    Regeasy().match('abc').mayBe(Regeasy().match('z')).match('a').test('abca').should.be.true;
+    Regeasy().anyTimes(Regeasy().match('z')).test('z').should.be.true;
+    Regeasy().anyTimes(Regeasy().match('z')).match('a').test('zzz').should.be.false;
+    Regeasy().match('abc').anyTimes(Regeasy().match('z')).match('a').test('abca').should.be.true;
   });
 
   it('should match one or more times', function(){
@@ -57,6 +60,9 @@ describe('regeasy test', function() {
     Regeasy().atleastOnce(Regeasy().match('z')).test('z').should.be.true;
     Regeasy().atleastOnce(Regeasy().match('z')).test('zz').should.be.true;
     Regeasy().atleastOnce(Regeasy().match('z')).test('a').should.be.false;
+
+    Regeasy().match('a').atleastOnce().test('foo').should.be.false;
+    Regeasy().match('a').atleastOnce().test('afoo').should.be.true;
   });
 
   it('should match atmost one times', function(){
@@ -67,6 +73,10 @@ describe('regeasy test', function() {
     Regeasy().atmostOnce(Regeasy().match('z')).test('z').should.be.true;
     Regeasy().atmostOnce(Regeasy().match('z')).match('a').test('zz').should.be.false;
     Regeasy().atmostOnce(Regeasy().match('z')).test('a').should.be.true;
+
+    Regeasy().match('z').atmostOnce().match('a').test('zz').should.be.false;
+    Regeasy().match('z').atmostOnce().test('za').should.be.true;
+    Regeasy().match('z').atmostOnce().test('a').should.be.true;
   });
 
   it('should match given number of times', function(){
